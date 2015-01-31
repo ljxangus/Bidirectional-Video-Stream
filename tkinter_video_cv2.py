@@ -162,7 +162,7 @@ class ImageGUI(Frame):
         self.parser.add_option("-y", "--window_size_y",type="int", default=480, help="windowsizey")
         self.parser.add_option("-a", "--send_size_x",type="int", default=320, help="sendsizex")
         self.parser.add_option("-b", "--send_size_y",type="int", default=240, help="sendsizey")
-        self.parser.add_option("-f", "--fps",type="float", default=10.0, help="fps")
+        self.parser.add_option("-f", "--fps",type="float", default=10, help="fps")
         self.parser.add_option("-c", "--compress_rate",type="int", default=20, help="compress_rate")
         (self.options, self.args) = self.parser.parse_args()
 
@@ -313,7 +313,7 @@ class ImageGUI(Frame):
             compress_rate = int(str(self.com_rateText.get("0.0",END)))
             #print "\n port is ",port
             #print "\n ip is",ip
-            self.sender.prepare_video(server_host=ip,port=port,send_size_x=send_frame_x,send_size_y= send_frame_y,send_fps= frame_fps)
+            self.sender.prepare_video(server_host=ip,port=port,send_size_x=send_frame_x,send_size_y= send_frame_y,send_fps= frame_fps,compress_rate=compress_rate)
         #print "\n sender port is ",self.sender.port
         #print "\n sender ip is",self.sender.server_host
         pSend = threading.Thread(target=self.draw_cam_frame)
@@ -351,7 +351,7 @@ class ImageGUI(Frame):
             #print count
             if count % self.sender.fps == 0:
                 count = 0
-                self.sendByteValue.set(str(self.sender.display_speed/1000*8)+" KBits")
+                self.sendByteValue.set(str(self.sender.display_speed/1000*8)+" kbits")
             self.sendPacketValue.set(str(self.sender.send_frame_num)+" Frames")
             self.update()
             self.sender.send_frame(str_img)
@@ -366,7 +366,7 @@ class ImageGUI(Frame):
         while running_flag_receive:
             if count % self.receiver.fps == 0:
                 count = 0
-                self.receiveByteValue.set(str(self.receiver.display_speed/1000*8)+" KBits")
+                self.receiveByteValue.set(str(self.receiver.display_speed/1000*8)+" kbits")
             self.receivePacketValue.set(str(self.receiver.receive_frame_num)+" Frames")
             frame = self.receiver.receive_frame()
             decimg = cv2.imdecode(frame,1)
